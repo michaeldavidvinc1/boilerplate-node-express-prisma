@@ -1,4 +1,4 @@
-# 🚀 Express TypeScript Boilerplate 2024
+# 🚀 Boilerplate Express Prisma 2025
 
 ![CodeQL](https://github.com/michaeldavidvinc1/boilerplate-node-express-prisma/actions/workflows/codeql.yml/badge.svg)
 
@@ -9,7 +9,7 @@ Hey There! 🙌
 
 ## 🌟 Introduction
 
-Welcome to the Express TypeScript Boilerplate 2024 – a streamlined, efficient, and scalable foundation for building powerful backend services with modern tools and practices in Express.js and TypeScript.
+Welcome to Boilerplate Express Prisma 2025 – a powerful, efficient, and scalable foundation for building backend services using Express.js and TypeScript, following modern best practices and technologies. 🚀
 
 ## 💡 Motivation
 
@@ -18,7 +18,7 @@ This boilerplate aims to:
 - ✨ Reduce setup time for new projects
 - 📊 Ensure code consistency and quality
 - ⚡  Facilitate rapid development
-- 🛡️ Encourage best practices in security, testing, and performance
+- 🛡️ Encourage best practices in security, and performance
 
 ## 🚀 Features
 
@@ -29,32 +29,22 @@ This boilerplate aims to:
 - 🔗 Path Aliases: Cleaner code with shortcut imports
 - 🔄 Renovate Integration: Automatic updates for dependencies
 - 🔒 Security: Helmet for HTTP header security and CORS setup
-- 📊 Logging: Efficient logging with `pino-http`
-- 🧪 Comprehensive Testing: Setup with Vitest and Supertest
-- 🔑 Code Quality Assurance: Husky and lint-staged for consistent quality
-- ✅ Unified Code Style: `Biomejs` for consistent coding standards
-- 📃 API Response Standardization: `ServiceResponse` class for consistent API responses
-- 🐳 Docker Support: Ready for containerization and deployment
+- 📊 Logging: Efficient logging with winston
 - 📝 Input Validation with Zod: Strongly typed request validation using `Zod`
-- 🧩 Swagger UI: Interactive API documentation generated from Zod schemas
 
 ## 🛠️ Getting Started
-
-### Video Demo
-
-For a visual guide, watch the [video demo](https://github.com/user-attachments/assets/b1698dac-d582-45a0-8d61-31131732b74e) to see the setup and running of the project.
 
 ### Step-by-Step Guide
 
 #### Step 1: 🚀 Initial Setup
 
-- Clone the repository: `git clone https://github.com/edwinhern/express-typescript-2024.git`
-- Navigate: `cd express-typescript-2024`
-- Install dependencies: `npm ci`
+- Clone the repository: `git clone https://github.com/michaeldavidvinc1/boilerplate-node-express-prisma.git`
+- Navigate: `cd boilerplate-node-express-prisma`
+- Install dependencies: `npm install`
 
 #### Step 2: ⚙️ Environment Configuration
 
-- Create `.env`: Copy `.env.template` to `.env`
+- Create `.env`: Copy `.env.example` to `.env`
 - Update `.env`: Fill in necessary environment variables
 
 #### Step 3: 🏃‍♂️ Running the Project
