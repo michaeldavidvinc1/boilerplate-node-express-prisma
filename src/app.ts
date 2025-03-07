@@ -6,7 +6,8 @@ import { StatusCodes } from "http-status-codes";
 import { errorConverter, errorHandler } from "./middleware/error";
 import config from "./config/config";
 import { logger } from "./config/logger";
-import { connectToDatabase, prismaClient } from "./config/db";
+import { prismaClient } from "./config/db";
+import { publicApi } from "./api/routes/publicApi";
 
 const app = express();
 
@@ -23,10 +24,7 @@ app.use(cookieParser());
 app.use(cors({ credentials: true }));
 app.options("*", cors());
 
-// send back a 404 error for any unknown api request
-app.use((next: NextFunction) => {
-  next(new ApiError(StatusCodes.NOT_FOUND, "Not found"));
-});
+app.use("/api/v1", publicApi)
 
 // convert error to ApiError, if needed
 app.use(errorConverter);
@@ -34,13 +32,14 @@ app.use(errorConverter);
 // handle error
 app.use(errorHandler);
 
+
 const checkDatabaseConnection = async () => {
   try {
     await prismaClient.$connect();
     logger.info("Successfully connected to the database");
   } catch (error) {
     logger.error("Failed to connect to the database", error);
-    process.exit(1); // Keluar dari aplikasi jika gagal terhubung
+    process.exit(1);
   }
 };
 
