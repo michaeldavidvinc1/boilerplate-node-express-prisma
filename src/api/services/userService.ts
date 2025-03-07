@@ -29,7 +29,7 @@ export class userService {
 
     return toUserResponse(user);
   }
-  static async getUserByEmail(email: string): Promise<UserResponse> {
+  static async getUserByEmail(email: string) {
     const user = await prismaClient.user.findFirst({
       where: {
         email,
@@ -40,7 +40,7 @@ export class userService {
       throw new ApiError(HTTP_NOT_FOUND, "User not found!");
     }
 
-    return toUserResponse(user);
+    return user;
   }
   static async createUser(req: CreateUserRequest): Promise<UserResponse> {
     const userRequest = Validation.validate(UserValidation.CREATE_USER, req);

@@ -1,13 +1,12 @@
 import cookieParser from "cookie-parser";
 import express, { NextFunction, Request } from "express";
 import cors from "cors";
-import ApiError from "./utils/apiError";
-import { StatusCodes } from "http-status-codes";
 import { errorConverter, errorHandler } from "./middleware/error";
 import config from "./config/config";
 import { logger } from "./config/logger";
 import { prismaClient } from "./config/db";
 import { publicApi } from "./api/routes/publicApi";
+import helmet from "helmet";
 
 const app = express();
 
@@ -23,6 +22,7 @@ app.use(cookieParser());
 // enable cors
 app.use(cors({ credentials: true }));
 app.options("*", cors());
+app.use(helmet())
 
 app.use("/api/v1", publicApi)
 
