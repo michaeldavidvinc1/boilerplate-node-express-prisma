@@ -1,4 +1,4 @@
-# 🚀 Boilerplate Express Prisma 2025
+# 🚀 Boilerplate Express Prisma
 
 ![CodeQL](https://github.com/michaeldavidvinc1/boilerplate-node-express-prisma/actions/workflows/codeql.yml/badge.svg)
 
@@ -9,7 +9,7 @@ Hey There! 🙌
 
 ## 🌟 Introduction
 
-Welcome to Boilerplate Express Prisma 2025 – a powerful, efficient, and scalable foundation for building backend services using Express.js and TypeScript, following modern best practices and technologies. 🚀
+Welcome to Boilerplate Express Prisma – a powerful, efficient, and scalable foundation for building backend services using Express.js and TypeScript, following modern best practices and technologies. 🚀
 
 ## 💡 Motivation
 
