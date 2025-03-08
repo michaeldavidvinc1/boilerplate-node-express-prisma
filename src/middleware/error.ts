@@ -1,37 +1,61 @@
-import { Request, Response, NextFunction } from 'express';
-import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime/library';
-import { ZodError } from 'zod';
-import { StatusCodes } from 'http-status-codes';
-import ApiError from '../utils/apiError';
-import config from '../config/config';
-import { logger } from '../config/logger';
+import { Request, Response, NextFunction } from "express";
+import {
+  PrismaClientKnownRequestError,
+  PrismaClientValidationError,
+} from "@prisma/client/runtime/library";
+import { ZodError } from "zod";
+import { StatusCodes } from "http-status-codes";
+import ApiError from "../utils/apiError";
+import config from "../config/config";
+import { logger } from "../config/logger";
+import {HTTP_BAD_REQUEST, HTTP_INTERNAL_SERVER_ERROR} from "../helper/httpStatusCodes";
 
 const errorConverter = (
-  err: Error | ZodError | PrismaClientKnownRequestError | PrismaClientValidationError | ApiError,
-  req: Request,
-  res: Response,
-  next: NextFunction
+    err: Error | ZodError | PrismaClientKnownRequestError | PrismaClientValidationError | ApiError,
+    req: Request,
+    res: Response,
+    next: NextFunction
 ) => {
   let error = err;
 
   if (error instanceof ZodError) {
-    const message = error.errors.map((e) => e.message).join(', ');
-    error = new ApiError(StatusCodes.BAD_REQUEST, message, false, err.stack);
+    const errors = error.errors.map((e) => ({
+      path: e.path.join("."),
+      message: e.message,
+    }));
+
+    error = new ApiError(
+        HTTP_BAD_REQUEST,
+        "Validation failed",
+        false,
+        err.stack
+    );
+
+    (error as any).errors = errors;
   }
 
   else if (error instanceof PrismaClientKnownRequestError) {
-    const message = `Prisma error: ${error.message}`;
-    error = new ApiError(StatusCodes.BAD_REQUEST, message, false, err.stack);
-  } else if (error instanceof PrismaClientValidationError) {
-    const message = `Prisma validation error: ${error.message}`;
-    error = new ApiError(StatusCodes.BAD_REQUEST, message, false, err.stack);
+    error = new ApiError(
+        HTTP_BAD_REQUEST,
+        `Prisma error: ${error.message}`,
+        false,
+        err.stack
+    );
+  }
+  else if (error instanceof PrismaClientValidationError) {
+    error = new ApiError(
+        HTTP_BAD_REQUEST,
+        `Prisma validation error: ${error.message}`,
+        false,
+        err.stack
+    );
   }
 
   else if (!(error instanceof ApiError)) {
     const statusCode =
-      error instanceof Error && 'statusCode' in error
-        ? (error.statusCode as number)
-        : StatusCodes.INTERNAL_SERVER_ERROR;
+        error instanceof Error && "statusCode" in error
+            ? (error.statusCode as number)
+            : HTTP_INTERNAL_SERVER_ERROR;
     const message = error.message || StatusCodes[statusCode];
     error = new ApiError(statusCode, message, false, err.stack);
   }
@@ -39,29 +63,24 @@ const errorConverter = (
   next(error);
 };
 
-const errorHandler = (
-  err: ApiError,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const errorHandler = (err: ApiError, req: Request, res: Response, next: NextFunction) => {
   let { statusCode, message } = err;
 
-  if (config.env === 'production' && !err.isOperational) {
-    statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
-    message = StatusCodes[StatusCodes.INTERNAL_SERVER_ERROR];
+  if (config.env === "production" && !err.isOperational) {
+    statusCode = HTTP_INTERNAL_SERVER_ERROR;
+    message = StatusCodes[HTTP_INTERNAL_SERVER_ERROR];
   }
 
   res.locals.errorMessage = err.message;
 
-  // Format respons
-  const response = {
+  const response: any = {
     code: statusCode,
     message,
-    ...(config.env === 'development' && { stack: err.stack }), 
+    ...(err instanceof ApiError && (err as any).errors && { errors: (err as any).errors }),
+    ...(config.env === "development" && { stack: err.stack }),
   };
 
-  if (config.env === 'development') {
+  if (config.env === "development") {
     logger.error(err);
   }
 

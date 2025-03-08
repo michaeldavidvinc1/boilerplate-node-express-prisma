@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { CreateUserRequest, SearchUser, UpdateUserRequest } from "../../model/request/userRequest";
 import catchAsync from "../../utils/catchAsync";
 import { userService } from "../services/userService";
 import { HTTP_CREATED, HTTP_OK } from "../../helper/httpStatusCodes";
+import {IUserCreate, IUserSearch, IUserUpdate} from "../../interface/userInterface";
 
 export class UserController {
     static createUser = catchAsync(async(req: Request, res: Response) => {
-        const request: CreateUserRequest = req.body as CreateUserRequest;
+        const request: IUserCreate = req.body as IUserCreate;
         const result = await userService.createUser(request)
         res.status(HTTP_CREATED).json({
             success: true,
@@ -15,7 +15,7 @@ export class UserController {
         })
     })
     static getAllUser = catchAsync(async(req: Request, res: Response) => {
-        const request: SearchUser = {
+        const request: IUserSearch = {
             name: (req.query.name as string) || "",
             email: (req.query.email as string) || "",
             page: req.query.page ? Number(req.query.page) : 1,
@@ -31,7 +31,7 @@ export class UserController {
     })
     static getSingleUser = catchAsync(async(req: Request, res: Response) => {
         const userId = req.params.id;
-        const result = await userService.getUserById(userId);
+        const result = await userService.getSingleUser(userId);
         res.status(HTTP_OK).json({
             success: true,
             message: "Get single user successfully",
@@ -40,7 +40,7 @@ export class UserController {
     })
     static updateUser = catchAsync(async(req: Request, res: Response) => {
         const userId = req.params.id;
-        const request: UpdateUserRequest = req.body as UpdateUserRequest;
+        const request: IUserUpdate = req.body as IUserUpdate;
         const result = await userService.updateUser(request, userId);
         res.status(HTTP_OK).json({
             success: true,

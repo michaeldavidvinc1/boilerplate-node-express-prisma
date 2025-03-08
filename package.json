@@ -2,7 +2,7 @@
   "name": "boilerplate-node-express-prisma",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/app.ts",
+  "main": "./src/server.ts",
   "directories": {
     "test": "test"
   },

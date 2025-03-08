@@ -1,25 +1,14 @@
 import moment from "moment";
 import { prismaClient } from "../../config/db";
-import { GenerateToken, SaveToken } from "../../model/request/tokenRequest";
-import {
-    JwtPayload,
-  TokenResponse,
-  toTokenResponse,
-} from "../../model/response/tokenResponse";
-import jwt from "jsonwebtoken";
+import jwt, {JwtPayload} from "jsonwebtoken";
 import config from "../../config/config";
 import ApiError from "../../utils/apiError";
 import { HTTP_NOT_FOUND } from "../../helper/httpStatusCodes";
-import { UserResponse } from "../../model/response/userResponse";
 import { TokenType } from "@prisma/client";
+import {AuthTokenResponse, GenerateToken, SaveToken, TokenResponse} from "../../interface/tokenInterface";
 
 export class TokenService {
-  static async saveToken({
-    token,
-    userId,
-    expires,
-    type,
-  }: SaveToken): Promise<TokenResponse> {
+  static async saveToken({ token, userId, expires, type }: SaveToken): Promise<TokenResponse> {
     const tokenDoc = await prismaClient.token.create({
       data: {
         token,
@@ -30,62 +19,64 @@ export class TokenService {
       },
     });
 
-    return toTokenResponse(tokenDoc);
+    return { token: tokenDoc.token, expires: tokenDoc.expires };
   }
-  static async generateToken({ userId, expires, type, secret }: GenerateToken) {
-    const payload = {
+
+  static async generateToken({ userId, expires, type, secret }: GenerateToken): Promise<string> {
+    const payload: JwtPayload = {
       sub: userId,
       iat: moment().unix(),
       exp: Math.floor(expires.getTime() / 1000),
       type,
     };
-    const token = jwt.sign(payload, secret);
-
-    return token;
+    return jwt.sign(payload, secret);
   }
-  static async verifyToken(token: string, type: string){
+
+  static async verifyToken(token: string, type: string) {
     const payload = jwt.verify(token, config.jwt_secret as string) as JwtPayload;
     const tokenDoc = await prismaClient.token.findFirst({
-        where: {
-            token,
-            type,
-            userId: payload.userId,
-            blacklisted: false
-        }
-    })
-    if(!tokenDoc){
-        throw new ApiError(HTTP_NOT_FOUND, "Token not found")
+      where: {
+        token,
+        type,
+        userId: payload.sub,
+        blacklisted: false,
+      },
+    });
+
+    if (!tokenDoc) {
+      throw new ApiError(HTTP_NOT_FOUND, "Token not found");
     }
 
-    return tokenDoc
+    return tokenDoc;
   }
-  static async generateAuthToken(user: UserResponse){
-    const accessTokenExpire = moment().add(config.jwt_expire, 'days');
-    const accessToken = await this.generateToken({userId: user.id, expires: accessTokenExpire.toDate(), type:TokenType.ACCESS, secret:config.jwt_secret})
 
-    const refreshTokenExpires = moment().add(config.jwt_refresh_expire, 'days');
-    const refreshToken = await this.generateToken({userId: user.id, expires: refreshTokenExpires.toDate(), type:TokenType.REFRESH, secret:config.jwt_secret});
+  static async generateAuthToken(userId: string): Promise<AuthTokenResponse> {
+    const accessTokenExpire = moment().add(config.jwt_expire, "days");
+    const accessToken = await this.generateToken({
+      userId,
+      expires: accessTokenExpire.toDate(),
+      type: TokenType.ACCESS,
+      secret: config.jwt_secret,
+    });
 
-    await this.saveToken({token: refreshToken, userId: user.id, expires: refreshTokenExpires.toDate(), type: TokenType.REFRESH, })
+    const refreshTokenExpires = moment().add(config.jwt_refresh_expire, "days");
+    const refreshToken = await this.generateToken({
+      userId,
+      expires: refreshTokenExpires.toDate(),
+      type: TokenType.REFRESH,
+      secret: config.jwt_secret,
+    });
+
+    await this.saveToken({
+      token: refreshToken,
+      userId,
+      expires: refreshTokenExpires.toDate(),
+      type: TokenType.REFRESH,
+    });
 
     return {
-        access: {
-          token: accessToken,
-          expires: accessTokenExpire.toDate(),
-        },
-        refresh: {
-          token: refreshToken,
-          expires: refreshTokenExpires.toDate(),
-        },
-      };
+      access: { token: accessToken, expires: accessTokenExpire.toDate() },
+      refresh: { token: refreshToken, expires: refreshTokenExpires.toDate() },
+    };
   }
-//   static async deleteToken(token: string, userId: string){
-//     const tokenDoc = await prismaClient.token.delete({
-//         where: {
-//             token,
-//             userId
-//         }
-//     })
-//     return tokenDoc
-//   }
 }

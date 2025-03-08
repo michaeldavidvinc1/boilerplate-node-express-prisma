@@ -32,20 +32,4 @@ app.use(errorConverter);
 // handle error
 app.use(errorHandler);
 
-
-const checkDatabaseConnection = async () => {
-  try {
-    await prismaClient.$connect();
-    logger.info("Successfully connected to the database");
-  } catch (error) {
-    logger.error("Failed to connect to the database", error);
-    process.exit(1);
-  }
-};
-
-// Panggil fungsi cek koneksi database
-checkDatabaseConnection();
-
-app.listen(config.port, () => {
-  logger.info(`Server running on localhost:${config.port}`);
-});
+export default app

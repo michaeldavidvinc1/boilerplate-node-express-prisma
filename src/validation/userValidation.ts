@@ -9,9 +9,8 @@ export class UserValidation {
   static readonly SEARCH: ZodType = z.object({
     name: z.string().optional(),
     email: z.string().optional(),
-    status: z.string().optional(),
     page: z.number().min(1).positive(),
-    size: z.number().min(1).max(100).positive(),
+    size: z.number().min(1).positive(),
   });
   static readonly UPDATE_USER: ZodType = z.object({
     name: z.string().min(1).optional(),
