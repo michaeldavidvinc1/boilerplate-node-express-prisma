@@ -38,10 +38,14 @@ This boilerplate aims to:
 
 #### Step 1: 🚀 Initial Setup
 
-- Clone the repository: `git clone https://github.com/michaeldavidvinc1/boilerplate-node-express-prisma.git`
-- Navigate: `cd boilerplate-node-express-prisma`
-- Install dependencies: `npm install`
-
+- Run Command: 
+```code
+npx boilerplate-node-express-prisma 
+```
+OR
+```code
+git clone https://github.com/michaeldavidvinc1/boilerplate-node-express-prisma.git
+```
 #### Step 2: ⚙️ Environment Configuration
 
 - Create `.env`: Copy `.env.example` to `.env`
