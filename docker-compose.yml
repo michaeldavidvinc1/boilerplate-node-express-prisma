@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  react-app:
+    image: node:lts-alpine
+    container_name: boilerplate-express-prisma
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: mysql://root:@host.docker.internal:3306/boilerplate-express
+    command: ["sh", "-c", "npm install && npx prisma generate && npm run dev"]
