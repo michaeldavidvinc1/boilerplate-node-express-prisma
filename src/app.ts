@@ -2,11 +2,8 @@ import cookieParser from "cookie-parser";
 import express, { NextFunction, Request } from "express";
 import cors from "cors";
 import { errorConverter, errorHandler } from "./middleware/error";
-import config from "./config/config";
-import { logger } from "./config/logger";
-import { prismaClient } from "./config/db";
-import { publicApi } from "./api/routes/publicApi";
 import helmet from "helmet";
+import {endpoint} from "./api/routes";
 
 const app = express();
 
@@ -24,7 +21,7 @@ app.use(cors({ credentials: true }));
 app.options("*", cors());
 app.use(helmet())
 
-app.use("/api/v1", publicApi)
+app.use("/api/v1", endpoint)
 
 // convert error to ApiError, if needed
 app.use(errorConverter);

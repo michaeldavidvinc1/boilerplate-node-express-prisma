@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import catchAsync from "../../utils/catchAsync";
-import { AuthService } from "../services/authService";
-import { HTTP_OK } from "../../helper/httpStatusCodes";
+import { AuthService } from "../services/auth.service";
 import {ILoginRequest} from "../../interface/authInterface";
+import {HTTP_OK} from "../../constant/data";
 
 export class AuthController {
     static login = catchAsync(async(req: Request, res: Response) => {

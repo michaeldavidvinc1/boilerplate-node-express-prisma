@@ -1,24 +1,25 @@
 import {IUser, IUserCreate, IUserSearch, IUserUpdate} from "../../interface/userInterface";
 import {prismaClient} from "../../config/db";
 import {Pageable} from "../../interface/page";
+import {UserRepositoryImpl} from "./impl/user.repository.impl";
 
-export class UserRepository {
-    static async createUser(userData: IUserCreate): Promise<IUser> {
+export class UserRepository implements  UserRepositoryImpl {
+    async createUser(userData: IUserCreate): Promise<IUser> {
         return prismaClient.user.create({data: userData})
     }
-    static async getUserById(id: string): Promise<IUser | null> {
+    async getUserById(id: string): Promise<IUser | null> {
         return prismaClient.user.findFirst({where: {id}})
     }
-    static async getUserByEmail(email: string): Promise<IUser | null> {
+    async getUserByEmail(email: string): Promise<IUser | null> {
         return prismaClient.user.findFirst({where: {email}})
     }
-    static async updateUser(id: string, userData: IUserUpdate): Promise<IUser> {
+    async updateUser(id: string, userData: IUserUpdate): Promise<IUser> {
         return prismaClient.user.update({where: {id}, data: userData})
     }
-    static async deleteUser(id: string): Promise<IUser> {
+    async deleteUser(id: string): Promise<IUser> {
         return prismaClient.user.delete({where: {id}})
     }
-    static async getAllUsers(userFilter: IUserSearch): Promise<Pageable<IUser>> {
+    async getAllUsers(userFilter: IUserSearch): Promise<Pageable<IUser>> {
         const skip = (userFilter.page - 1) * userFilter.size;
         const filters: Record<string, unknown> = {};
 

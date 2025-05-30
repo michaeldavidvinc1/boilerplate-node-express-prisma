@@ -1,17 +1,24 @@
-import { HTTP_UNAUTHORIZED } from "../../helper/httpStatusCodes";
 import ApiError from "../../utils/apiError";
 import { AuthValidation } from "../../validation/authValidation";
 import { Validation } from "../../validation/validation";
-import { TokenService } from "./tokenService";
+import { TokenService } from "./token.service";
 import bcrypt from "bcrypt";
-import { UserRepository } from "../repository/userRepository";
 import {ILoginRequest, LoginResponse} from "../../interface/authInterface";
+import {HTTP_UNAUTHORIZED} from "../../constant/data";
+import {UserRepositoryImpl} from "../repository/impl/user.repository.impl";
+import {TokenRepositoryImpl} from "../repository/impl/token.repository.impl";
 
 export class AuthService {
-    static async login(req: ILoginRequest): Promise<LoginResponse> {
+
+    constructor(
+        private userRepository: UserRepositoryImpl,
+        private tokenService: TokenService,
+    ) {}
+
+    async login(req: ILoginRequest): Promise<LoginResponse> {
         const loginRequest = Validation.validate(AuthValidation.LOGIN, req);
 
-        const user = await UserRepository.getUserByEmail(loginRequest.email);
+        const user = await this.userRepository.getUserByEmail(loginRequest.email);
 
         if (!user) {
             throw new ApiError(HTTP_UNAUTHORIZED, "Incorrect email or password");
@@ -23,7 +30,7 @@ export class AuthService {
             throw new ApiError(HTTP_UNAUTHORIZED, "Incorrect email or password");
         }
 
-        const tokens = await TokenService.generateAuthToken(user.id);
+        const tokens = await this.tokenService.generateAuthToken(user.id);
 
         return { user, tokens };
     }

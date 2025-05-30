@@ -1,6 +1,6 @@
 {
   "name": "boilerplate-node-express-prisma",
-  "version": "1.0.4",
+  "version": "1.0.0",
   "description": "",
   "main": "./src/server.ts",
   "bin": {
@@ -14,7 +14,7 @@
   "build": "rimraf dist && tsc",
   "ts.check": "tsc --noEmit --project tsconfig.json",
   "add-build": "git add dist",
-  "start": "node ./dist/index.js"
+  "start": "TZ=Asia/Jakarta node ./dist/index.js"
   },
   "repository": {
     "type": "git",

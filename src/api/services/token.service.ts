@@ -3,26 +3,16 @@ import { prismaClient } from "../../config/db";
 import jwt, {JwtPayload} from "jsonwebtoken";
 import config from "../../config/config";
 import ApiError from "../../utils/apiError";
-import { HTTP_NOT_FOUND } from "../../helper/httpStatusCodes";
 import { TokenType } from "@prisma/client";
 import {AuthTokenResponse, GenerateToken, SaveToken, TokenResponse} from "../../interface/tokenInterface";
+import {HTTP_NOT_FOUND} from "../../constant/data";
+import {TokenRepositoryImpl} from "../repository/impl/token.repository.impl";
 
 export class TokenService {
-  static async saveToken({ token, userId, expires, type }: SaveToken): Promise<TokenResponse> {
-    const tokenDoc = await prismaClient.token.create({
-      data: {
-        token,
-        userId,
-        expires,
-        type,
-        blacklisted: false,
-      },
-    });
 
-    return { token: tokenDoc.token, expires: tokenDoc.expires };
-  }
+  constructor(private tokenRepository: TokenRepositoryImpl) {}
 
-  static async generateToken({ userId, expires, type, secret }: GenerateToken): Promise<string> {
+  async generateToken({ userId, expires, type, secret }: GenerateToken): Promise<string> {
     const payload: JwtPayload = {
       sub: userId,
       iat: moment().unix(),
@@ -32,25 +22,8 @@ export class TokenService {
     return jwt.sign(payload, secret);
   }
 
-  static async verifyToken(token: string, type: string) {
-    const payload = jwt.verify(token, config.jwt_secret as string) as JwtPayload;
-    const tokenDoc = await prismaClient.token.findFirst({
-      where: {
-        token,
-        type,
-        userId: payload.sub,
-        blacklisted: false,
-      },
-    });
 
-    if (!tokenDoc) {
-      throw new ApiError(HTTP_NOT_FOUND, "Token not found");
-    }
-
-    return tokenDoc;
-  }
-
-  static async generateAuthToken(userId: string): Promise<AuthTokenResponse> {
+  async generateAuthToken(userId: string): Promise<AuthTokenResponse> {
     const accessTokenExpire = moment().add(config.jwt_expire, "days");
     const accessToken = await this.generateToken({
       userId,
@@ -58,6 +31,13 @@ export class TokenService {
       type: TokenType.ACCESS,
       secret: config.jwt_secret,
     });
+
+    await this.tokenRepository.create({
+      token: accessToken,
+      userId,
+      expires: accessTokenExpire.toDate(),
+      type: TokenType.ACCESS,
+    })
 
     const refreshTokenExpires = moment().add(config.jwt_refresh_expire, "days");
     const refreshToken = await this.generateToken({
@@ -67,12 +47,12 @@ export class TokenService {
       secret: config.jwt_secret,
     });
 
-    await this.saveToken({
+    await this.tokenRepository.create({
       token: refreshToken,
       userId,
       expires: refreshTokenExpires.toDate(),
       type: TokenType.REFRESH,
-    });
+    })
 
     return {
       access: { token: accessToken, expires: accessTokenExpire.toDate() },
