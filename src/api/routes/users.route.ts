@@ -11,8 +11,8 @@ const userRepository =  new UserRepository();
 const userService = new UserService(userRepository);
 const userController = new UserController(userService);
 
-userRouter.post("/create", authenticate, rateLimiter, userController.createUser);
-userRouter.get("/", authenticate, rateLimiter, userController.getAllUser);
-userRouter.get("/:id", authenticate, rateLimiter, userController.getSingleUser);
-userRouter.put("/:id", authenticate, rateLimiter, userController.updateUser);
-userRouter.delete("/:id", authenticate, rateLimiter, userController.deleteUser);
+userRouter.post("/create", rateLimiter, authenticate, userController.createUser);
+userRouter.get("/", rateLimiter, authenticate, userController.getAllUser);
+userRouter.get("/:id",  rateLimiter, authenticate, userController.getSingleUser);
+userRouter.put("/:id", rateLimiter, authenticate, userController.updateUser);
+userRouter.delete("/:id", rateLimiter, authenticate, userController.deleteUser);
