@@ -2,7 +2,7 @@ import ApiError from "../../utils/apiError";
 import { AuthValidation } from "../../validation/auth.validation";
 import { Validation } from "../../validation/validation";
 import { TokenService } from "./token.service";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import {AuthResponse, ILoginRequest, IRegisterRequest} from "../../interface/auth.interface";
 import {HTTP_CONFLICT, HTTP_FORBIDDEN, HTTP_NOT_FOUND, HTTP_UNAUTHORIZED} from "../../constant/data";
 import {UserRepositoryImpl} from "../repository/impl/user.repository.impl";

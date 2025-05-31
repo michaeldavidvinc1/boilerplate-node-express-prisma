@@ -80,6 +80,16 @@ const errorHandler = (err: ApiError, req: Request, res: Response, next: NextFunc
     ...(config.env === "development" && { stack: err.stack }),
   };
 
+  logger.error(
+      `Error ${statusCode} on ${req.method} ${req.originalUrl}: ${message}`,
+      {
+        ...(config.env === "development" && { stack: err.stack }),
+        ...(req.body && Object.keys(req.body).length > 0 && { body: req.body }),
+        ip: req.ip,
+        userAgent: req.headers["user-agent"],
+      }
+  );
+
   if (config.env === "development") {
     logger.error(err);
   }

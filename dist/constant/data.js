@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HTTP_CONFLICT = exports.HTTP_INTERNAL_SERVER_ERROR = exports.HTTP_NOT_FOUND = exports.HTTP_FORBIDDEN = exports.HTTP_UNAUTHORIZED = exports.HTTP_BAD_REQUEST = exports.HTTP_CREATED = exports.HTTP_OK = void 0;
+const http_status_codes_1 = require("http-status-codes");
+exports.HTTP_OK = http_status_codes_1.StatusCodes.OK;
+exports.HTTP_CREATED = http_status_codes_1.StatusCodes.CREATED;
+exports.HTTP_BAD_REQUEST = http_status_codes_1.StatusCodes.BAD_REQUEST;
+exports.HTTP_UNAUTHORIZED = http_status_codes_1.StatusCodes.UNAUTHORIZED;
+exports.HTTP_FORBIDDEN = http_status_codes_1.StatusCodes.FORBIDDEN;
+exports.HTTP_NOT_FOUND = http_status_codes_1.StatusCodes.NOT_FOUND;
+exports.HTTP_INTERNAL_SERVER_ERROR = http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR;
+exports.HTTP_CONFLICT = http_status_codes_1.StatusCodes.CONFLICT;
