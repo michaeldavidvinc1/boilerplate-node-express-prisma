@@ -3,10 +3,10 @@ import { prismaClient } from "../../config/db";
 import jwt, {JwtPayload} from "jsonwebtoken";
 import config from "../../config/config";
 import ApiError from "../../utils/apiError";
-import { TokenType } from "@prisma/client";
-import {AuthTokenResponse, GenerateToken, SaveToken, TokenResponse} from "../../interface/tokenInterface";
+import {GenerateToken, TokenResponse} from "../../interface/tokenInterface";
 import {HTTP_NOT_FOUND} from "../../constant/data";
 import {TokenRepositoryImpl} from "../repository/impl/token.repository.impl";
+import {TokenType} from "@prisma/client";
 
 export class TokenService {
 
@@ -23,7 +23,7 @@ export class TokenService {
   }
 
 
-  async generateAuthToken(userId: string): Promise<AuthTokenResponse> {
+  async generateAccessToken(userId: string): Promise<TokenResponse> {
     const accessTokenExpire = moment().add(config.jwt_expire, "days");
     const accessToken = await this.generateToken({
       userId,
@@ -39,6 +39,12 @@ export class TokenService {
       type: TokenType.ACCESS,
     })
 
+    return {
+      token: accessToken, expires: accessTokenExpire.toDate()
+    };
+  }
+
+  async generateRefreshToken(userId: string): Promise<TokenResponse> {
     const refreshTokenExpires = moment().add(config.jwt_refresh_expire, "days");
     const refreshToken = await this.generateToken({
       userId,
@@ -55,8 +61,7 @@ export class TokenService {
     })
 
     return {
-      access: { token: accessToken, expires: accessTokenExpire.toDate() },
-      refresh: { token: refreshToken, expires: refreshTokenExpires.toDate() },
-    };
+      token: refreshToken, expires: refreshTokenExpires.toDate()
+    }
   }
 }

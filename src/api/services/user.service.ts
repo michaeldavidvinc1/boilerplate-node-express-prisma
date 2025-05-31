@@ -1,6 +1,6 @@
 
 import ApiError from "../../utils/apiError";
-import {UserValidation} from "../../validation/userValidation";
+import {UserValidation} from "../../validation/user.validation";
 import {Validation} from "../../validation/validation";
 import bcrypt from "bcrypt";
 import {IUser, IUserCreate, IUserSearch, IUserUpdate} from "../../interface/userInterface";

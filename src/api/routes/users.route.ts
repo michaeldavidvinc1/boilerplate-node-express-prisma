@@ -9,8 +9,8 @@ const userRepository =  new UserRepository();
 const userService = new UserService(userRepository);
 const userController = new UserController(userService);
 
-userRouter.post("/user/create", userController.createUser);
-userRouter.get("/user", userController.getAllUser);
-userRouter.get("/user/:id", userController.getSingleUser);
-userRouter.put("/user/:id", userController.updateUser);
-userRouter.delete("/user/:id", userController.deleteUser);
+userRouter.post("/create", userController.createUser);
+userRouter.get("/", userController.getAllUser);
+userRouter.get("/:id", userController.getSingleUser);
+userRouter.put("/:id", userController.updateUser);
+userRouter.delete("/:id", userController.deleteUser);

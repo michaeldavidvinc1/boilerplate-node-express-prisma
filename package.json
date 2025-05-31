@@ -9,12 +9,12 @@
   "directories": {
     "test": "test"
   },
- "scripts": {
-  "dev": "nodemon",
-  "build": "rimraf dist && tsc",
-  "ts.check": "tsc --noEmit --project tsconfig.json",
-  "add-build": "git add dist",
-  "start": "TZ=Asia/Jakarta node ./dist/index.js"
+  "scripts": {
+    "dev": "nodemon",
+    "build": "rimraf dist && tsc",
+    "ts.check": "tsc --noEmit --project tsconfig.json",
+    "add-build": "git add dist",
+    "start": "TZ=Asia/Jakarta node ./dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/michaeldavidvinc1/boilerplate-node-express-prisma#readme",
   "dependencies": {
-    "@prisma/client": "^6.4.1",
+    "@prisma/client": "^6.8.2",
     "@types/winston": "^2.4.4",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
