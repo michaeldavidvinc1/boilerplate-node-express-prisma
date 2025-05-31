@@ -26,19 +26,20 @@ model User {
   updatedAt       DateTime @updatedAt
 
   @@index([id])
+  @@map("users")
 }
 
 model Token {
-  id          String   @id @default(cuid())
-  token       String   @db.Text 
+  id          String    @id @default(cuid())
+  token       String    @db.Text
   userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  type        String
+  user        User      @relation(fields: [userId], references: [id])
+  type        TokenType
   expires     DateTime
-  blacklisted Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  blacklisted Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@index([token(length: 64)])
-  @@map("tokens")
+  @@map("token")
 }

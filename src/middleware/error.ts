@@ -8,7 +8,7 @@ import { StatusCodes } from "http-status-codes";
 import ApiError from "../utils/apiError";
 import config from "../config/config";
 import { logger } from "../config/logger";
-import {HTTP_BAD_REQUEST, HTTP_INTERNAL_SERVER_ERROR} from "../helper/httpStatusCodes";
+import {HTTP_BAD_REQUEST, HTTP_INTERNAL_SERVER_ERROR} from "../constant/data";
 
 const errorConverter = (
     err: Error | ZodError | PrismaClientKnownRequestError | PrismaClientValidationError | ApiError,
