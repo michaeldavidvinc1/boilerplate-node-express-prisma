@@ -5,6 +5,7 @@ import {AuthService} from "../services/auth.service";
 import {UserRepository} from "../repository/user.repository";
 import {TokenService} from "../services/token.service";
 import {TokenRepository} from "../repository/token.repository";
+import rateLimiter from "../../middleware/rate.limiter";
 
 export const authRouter = express.Router();
 
@@ -14,6 +15,6 @@ const tokenService = new TokenService(tokenRepository)
 const authService = new AuthService(userRepository, tokenService, tokenRepository)
 const authController = new AuthController(authService)
 
-authRouter.post("/login", authController.login);
-authRouter.post("/register", authController.register);
-authRouter.post("/refresh-token", authController.refreshToken);
+authRouter.post("/login", rateLimiter, authController.login);
+authRouter.post("/register", rateLimiter, authController.register);
+authRouter.post("/refresh-token", rateLimiter, authController.refreshToken);
