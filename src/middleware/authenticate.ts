@@ -13,7 +13,7 @@ const authenticate = async (req: Request, res: Response, next: NextFunction) => 
     const authHeader = req.headers.authorization;
     const token = authHeader?.split(' ')[1];
     if (!token) {
-        throw new ApiError(HTTP_NOT_FOUND, "Access token missing!");
+        return next(new ApiError(HTTP_NOT_FOUND, "Access token missing!"));
     }
 
     try {
