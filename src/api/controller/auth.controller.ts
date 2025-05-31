@@ -27,4 +27,14 @@ export class AuthController {
             data: result
         })
     })
+
+    refreshToken = catchAsync(async(req: Request, res: Response) => {
+        const request = req.body.refreshToken;
+        const result = await this.authService.refreshToken(request);
+        res.status(HTTP_OK).json({
+            success: true,
+            message: "Refresh token successfully",
+            data: result
+        })
+    })
 }

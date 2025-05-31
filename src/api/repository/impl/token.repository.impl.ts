@@ -6,7 +6,8 @@ export interface TokenRepositoryImpl {
     create(tokenData: ITokenCreate): Promise<TokenEntity>;
     getTokenByUserId(userId: string): Promise<TokenEntity[]>;
     getToken(userId: string, type: TokenType, token: string): Promise<TokenEntity | null>;
-    getTokenRefresh(userId: string): Promise<TokenEntity | null>;
+    getTokenAccess(userId: string): Promise<TokenEntity | null>;
+    getTokenRefresh(refreshToken: string): Promise<TokenEntity | null>;
     deleteToken(tokenId: string, userId: string, token: string): Promise<TokenEntity>;
     deleteAllTokenByUser(userId: string): Promise<void>;
 }

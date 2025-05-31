@@ -16,3 +16,4 @@ const authController = new AuthController(authService)
 
 authRouter.post("/login", authController.login);
 authRouter.post("/register", authController.register);
+authRouter.post("/refresh-token", authController.refreshToken);

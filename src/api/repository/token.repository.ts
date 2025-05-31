@@ -17,9 +17,15 @@ export class TokenRepository implements TokenRepositoryImpl {
         return prismaClient.token.findFirst({ where: { userId, type, token } });
     }
 
-    async getTokenRefresh(userId: string): Promise<TokenEntity | null> {
+    async getTokenAccess(userId: string): Promise<TokenEntity | null> {
         return prismaClient.token.findFirst({
-            where: { userId, type: TokenType.REFRESH },
+            where: { userId, type: TokenType.ACCESS },
+        });
+    }
+
+    async getTokenRefresh(refreshToken: string): Promise<TokenEntity | null> {
+        return prismaClient.token.findFirst({
+            where: { token: refreshToken, type: TokenType.REFRESH },
         });
     }
 
