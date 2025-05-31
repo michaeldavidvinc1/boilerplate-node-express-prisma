@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.authRouter = void 0;
+const express_1 = __importDefault(require("express"));
+const auth_controller_1 = require("../controller/auth.controller");
+const auth_service_1 = require("../services/auth.service");
+const user_repository_1 = require("../repository/user.repository");
+const token_service_1 = require("../services/token.service");
+const token_repository_1 = require("../repository/token.repository");
+const rate_limiter_1 = __importDefault(require("../../middleware/rate.limiter"));
+exports.authRouter = express_1.default.Router();
+const userRepository = new user_repository_1.UserRepository();
+const tokenRepository = new token_repository_1.TokenRepository();
+const tokenService = new token_service_1.TokenService(tokenRepository);
+const authService = new auth_service_1.AuthService(userRepository, tokenService, tokenRepository);
+const authController = new auth_controller_1.AuthController(authService);
+exports.authRouter.post("/login", rate_limiter_1.default, authController.login);
+exports.authRouter.post("/register", rate_limiter_1.default, authController.register);
+exports.authRouter.post("/refresh-token", rate_limiter_1.default, authController.refreshToken);

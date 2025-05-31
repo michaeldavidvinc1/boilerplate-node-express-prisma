@@ -1,4 +1,4 @@
-# 🚀 Boilerplate Express Prisma
+# 🚀 Boilerplate Express Prisma TS
 
 ![CodeQL](https://github.com/michaeldavidvinc1/boilerplate-node-express-prisma/actions/workflows/codeql.yml/badge.svg)
 
@@ -9,7 +9,7 @@ Hey There! 🙌
 
 ## 🌟 Introduction
 
-Welcome to Boilerplate Express Prisma – a powerful, efficient, and scalable foundation for building backend services using Express.js and TypeScript, following modern best practices and technologies. 🚀
+Welcome to **Boilerplate Express Prisma TS** – a powerful, efficient, and scalable foundation for building backend services using **Express.js** and **TypeScript**, following modern best practices and technologies. 🚀
 
 ## 💡 Motivation
 
@@ -19,6 +19,17 @@ This boilerplate aims to:
 - 📊 Ensure code consistency and quality
 - ⚡  Facilitate rapid development
 - 🛡️ Encourage best practices in security, and performance
+
+## 🧰 Tech Stack
+
+- **Node.js** (LTS)
+- **Express.js**
+- **TypeScript**
+- **Prisma ORM**
+- **Mysql** (or your DB of choice)
+- **Zod** for schema validation
+- **Winston** for logging
+- **Helmet & CORS** for security
 
 ## 🚀 Features
 
@@ -38,9 +49,16 @@ This boilerplate aims to:
 
 #### Step 1: 🚀 Initial Setup
 
+- Create a New Project Folder
+
+```code
+mkdir my-new-api
+cd my-new-api
+```
+
 - Run Command: 
 ```code
-npx boilerplate-node-express-prisma 
+npx boilerplate-express-prisma-ts
 ```
 OR
 ```code
