@@ -1,6 +1,6 @@
 {
   "name": "boilerplate-express-prisma-ts",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "./src/server.ts",
   "bin": {
@@ -15,6 +15,9 @@
     "ts.check": "tsc --noEmit --project tsconfig.json",
     "add-build": "git add dist",
     "start": "TZ=Asia/Jakarta node ./dist/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",
